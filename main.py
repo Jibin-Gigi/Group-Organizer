@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 def main():
-    input_file = 'Google Launchpad.xlsx'
+    input_file = 'your_excel_filename.xlsx'
     sheet_name = 'Sheet1'
 
     if not os.path.exists(input_file):
