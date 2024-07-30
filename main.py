@@ -1,12 +1,29 @@
 import pandas as pd
+import os
 
-def main():  
-    df = pd.read_excel('Google Launchpad.xlsx', sheet_name='Sheet1')
+def main():
+    input_file = 'Google Launchpad.xlsx'
+    sheet_name = 'Sheet1'
+
+    if not os.path.exists(input_file):
+        print(f"Error: The file '{input_file}' does not exist.")
+        return
+    
+    try:
+        df = pd.read_excel(input_file, sheet_name=sheet_name)
+    except Exception as e:
+        print(f"Error reading '{input_file}': {e}")
+        return
+    
     df = df.sample(frac=1).reset_index(drop=True)
     df['Contact Number Column'] = df['Contact Number Column'].astype(str)
     
-    no_of_groups = int(input('Enter the number of groups: '))
- 
+    try:
+        no_of_groups = int(input('Enter the number of groups: '))
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+        return
+
     male_df = df[df['Gender'] == 'Male']
     female_df = df[df['Gender'] == 'Female']
     
@@ -35,8 +52,8 @@ def main():
         female_start_index = female_end_index
     
     with pd.ExcelWriter('output.xlsx', engine='xlsxwriter') as writer:
-        for indx, group in enumerate(groups):
-            group.to_excel(writer, sheet_name=f"Group {indx + 1}", index=False)
+        for index, group in enumerate(groups):
+            group.to_excel(writer, sheet_name=f"Group {index + 1}", index=False)
 
 if __name__ == "__main__":
     main()
